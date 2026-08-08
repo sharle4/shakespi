@@ -22,7 +22,7 @@ Format required:
     "Choice 2 text..."
   ]
 }
-Ensure the text is engaging and choices are clear. Keep the story moving. If choices is empty, it means the story is over."""
+Ensure the text is engaging and choices are clear. Do not use markdown formatting (no asterisks, no bold) inside the JSON text fields as they will be read aloud by TTS. Keep the story moving. If choices is empty, it means the story is over."""
 
     def run(self):
         logger.info(f"Starting Story mode for profile {self.profile_id}")

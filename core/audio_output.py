@@ -2,6 +2,7 @@ import os
 import subprocess
 import hashlib
 import yaml
+import re
 import sounddevice as sd
 import soundfile as sf
 import numpy as np
@@ -32,11 +33,23 @@ class AudioOutput:
         except Exception as e:
             logger.error(f"Failed to load config for audio output: {e}")
 
+    def _clean_text(self, text):
+        if not text:
+            return ""
+        # Remove asterisks (*), hashtags (#), underscores (_), and markdown list markers
+        text = re.sub(r'\*+', '', text)
+        text = re.sub(r'#+\s*', '', text)
+        text = re.sub(r'_+', '', text)
+        text = re.sub(r'^\s*[-*+]\s+', '', text, flags=re.MULTILINE)
+        # Normalize whitespace
+        text = re.sub(r'\s+', ' ', text).strip()
+        return text
+
     def generate_tts(self, text, lang="en"):
         """
         Generates TTS audio and returns the path to the cached WAV file.
         """
-        text = text.strip()
+        text = self._clean_text(text)
         if not text:
             return None
 

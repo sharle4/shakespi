@@ -18,6 +18,7 @@ Your goals:
 2. Use English suitable for an A2/B1 level. Keep sentences short and clear.
 3. If the user makes a significant grammar or vocabulary mistake in their previous turn, briefly point it out and correct it before continuing the conversation.
 4. Keep the conversation flowing by asking questions.
+5. Do NOT use markdown formatting (no asterisks, no bold, no italics, no bullet points) as your text is read aloud by TTS.
 """
 
     def run(self):
