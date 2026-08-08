@@ -1,0 +1,15 @@
+# Shakespi Configuration
+
+# Models
+groq_model: "whisper-large-v3-turbo"
+piper_voice_fr: "fr_FR-upmc-medium.onnx"
+piper_voice_en: "en_US-lessac-medium.onnx"
+
+# Application Settings
+daily_new_cards_limit: 20
+max_reviews_per_session: 50
+audio_device_index: null  # Set to an integer to force a specific audio device, otherwise default is used
+
+# Simulation Mode (for PC development)
+# Can also be set via environment variable: SHAKESPI_SIMULATE_INPUT=1
+simulate_input: false

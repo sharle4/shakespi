@@ -1,0 +1,50 @@
+{
+    "id": "mystery_house",
+    "title": "The Mystery House",
+    "start_scene": "start",
+    "scenes": [
+        {
+            "id": "start",
+            "text": "You are standing in front of an old, abandoned house. It is dark and raining. The front door is slightly open. Do you go inside, or look through the window?",
+            "choices": [
+                {
+                    "text": "Go inside the house.",
+                    "next_scene": "hallway"
+                },
+                {
+                    "text": "Look through the window.",
+                    "next_scene": "window"
+                }
+            ]
+        },
+        {
+            "id": "hallway",
+            "text": "You push the door open and step into the hallway. It smells like dust. Suddenly, you hear a strange noise upstairs. Will you go upstairs, or leave the house?",
+            "choices": [
+                {
+                    "text": "Go upstairs to investigate.",
+                    "next_scene": "upstairs"
+                },
+                {
+                    "text": "Run away! Leave the house.",
+                    "next_scene": "run_away"
+                }
+            ]
+        },
+        {
+            "id": "window",
+            "text": "You wipe the rain off the glass and look inside. You see a shadow moving in the living room! You decide it's too dangerous and go back home. The end.",
+            "choices": []
+        },
+        {
+            "id": "upstairs",
+            "text": "You walk up the stairs. The noise was just an open window banging in the wind. You close it and feel relieved. The end.",
+            "choices": []
+        },
+        {
+            "id": "run_away",
+            "text": "You get scared and run all the way home. Sometimes it's better to be safe! The end.",
+            "choices": []
+        }
+    ]
+}

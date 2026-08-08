@@ -1,0 +1,31 @@
+{
+    "id": "lost_wallet",
+    "title": "The Lost Wallet",
+    "start_scene": "start",
+    "scenes": [
+        {
+            "id": "start",
+            "text": "You are walking in the park and you see a wallet on the ground. You pick it up. There is a lot of money inside, and an ID card. What do you do?",
+            "choices": [
+                {
+                    "text": "Keep the money for yourself.",
+                    "next_scene": "keep_money"
+                },
+                {
+                    "text": "Take it to the police station.",
+                    "next_scene": "police_station"
+                }
+            ]
+        },
+        {
+            "id": "keep_money",
+            "text": "You decide to keep the money. You go to a store and buy a lot of video games. But you feel guilty all day. Was it worth it? The end.",
+            "choices": []
+        },
+        {
+            "id": "police_station",
+            "text": "You walk to the police station and give them the wallet. The police officer thanks you. Two days later, the owner calls you and gives you a reward! You did the right thing. The end.",
+            "choices": []
+        }
+    ]
+}

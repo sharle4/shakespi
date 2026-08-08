@@ -1,0 +1,109 @@
+# Logical action mapping
+# Keys are logical actions used in the application code.
+# Values define the physical mouse button and the simulated keyboard key.
+
+# Physical mouse buttons: "LEFT", "RIGHT", "MIDDLE", "SIDE_FWD", "SIDE_BACK"
+# Simulated keys (keyboard library format): "left", "right", "space", "up", "down", etc.
+
+ACTION_MENU_VOCABULARY:
+  mouse: "LEFT"
+  keyboard: "left"
+  description: "Select Vocabulary Mode"
+
+ACTION_MENU_CONVERSATION:
+  mouse: "RIGHT"
+  keyboard: "right"
+  description: "Select Conversation Mode"
+
+ACTION_MENU_STORY:
+  mouse: "SIDE_FWD"
+  keyboard: "up"
+  description: "Select Story Mode"
+
+ACTION_MENU_REPEAT:
+  mouse: "MIDDLE"
+  keyboard: "space"
+  description: "Repeat Menu options"
+
+ACTION_MENU_STATS:
+  mouse: "SIDE_BACK"
+  keyboard: "down"
+  description: "Hear profile stats"
+
+# Vocabulary Mode Mappings
+ACTION_VOCAB_FLIP:
+  mouse: "LEFT"
+  keyboard: "left"
+  description: "Flip card to see back"
+
+ACTION_VOCAB_REPEAT:
+  mouse: "MIDDLE"
+  keyboard: "space"
+  description: "Repeat front of card"
+
+ACTION_VOCAB_RATE_AGAIN:
+  mouse: "LEFT"
+  keyboard: "left"
+  description: "Rate: Again (1)"
+
+ACTION_VOCAB_RATE_HARD:
+  mouse: "RIGHT"
+  keyboard: "right"
+  description: "Rate: Hard (2)"
+
+ACTION_VOCAB_RATE_GOOD:
+  mouse: "SIDE_FWD"
+  keyboard: "up"
+  description: "Rate: Good (3)"
+
+ACTION_VOCAB_RATE_EASY:
+  mouse: "SIDE_BACK"
+  keyboard: "down"
+  description: "Rate: Easy (4)"
+
+ACTION_VOCAB_QUIT:
+  mouse: "MIDDLE"
+  keyboard: "space"
+  description: "Quit session early (hold or double click - logic handled in code)"
+
+# Conversation Mode Mappings
+ACTION_CONV_RECORD:
+  mouse: "LEFT"
+  keyboard: "left"
+  description: "Hold to record voice"
+
+ACTION_CONV_QUIT:
+  mouse: "RIGHT"
+  keyboard: "right"
+  description: "Quit conversation mode"
+
+# Story Mode Mappings
+ACTION_STORY_REPEAT:
+  mouse: "MIDDLE"
+  keyboard: "space"
+  description: "Repeat current scene"
+
+ACTION_STORY_VOCAB:
+  mouse: "SIDE_BACK"
+  keyboard: "down"
+  description: "Vocab pause: what did the last word mean?"
+
+ACTION_STORY_CHOICE_1:
+  mouse: "LEFT"
+  keyboard: "left"
+  description: "Select choice 1"
+
+ACTION_STORY_CHOICE_2:
+  mouse: "RIGHT"
+  keyboard: "right"
+  description: "Select choice 2"
+
+ACTION_STORY_CHOICE_3:
+  mouse: "SIDE_FWD"
+  keyboard: "up"
+  description: "Select choice 3"
+
+ACTION_STORY_QUIT:
+  mouse: "MIDDLE"
+  keyboard: "space"
+  description: "Quit story mode"
