@@ -1,6 +1,7 @@
 # Shakespi Configuration
 
 # Models
+gemini_model: "gemini-flash-latest"
 groq_model: "whisper-large-v3-turbo"
 piper_voice_fr: "fr_FR-upmc-medium.onnx"
 piper_voice_en: "en_US-lessac-medium.onnx"

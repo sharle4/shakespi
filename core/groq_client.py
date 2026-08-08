@@ -12,6 +12,9 @@ class GroqClient:
         self.api_url = "https://api.groq.com/openai/v1/audio/transcriptions"
         
         load_dotenv()
+        if config_path == "config/config.example.yaml" and os.path.exists("config/config.yaml"):
+            config_path = "config/config.yaml"
+            
         self._load_config(config_path)
         
         self.api_key = self.api_key or os.getenv("GROQ_API_KEY")

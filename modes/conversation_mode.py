@@ -33,14 +33,16 @@ Your goals:
         history = []
         
         # Initial greeting from Gemini based on the system prompt
+        initial_user_msg = "Start the conversation by greeting me and asking how I am."
         response = self.gemini_client.generate_conversation_response(
             self.system_prompt, 
             history, 
-            "Start the conversation by greeting me and asking how I am."
+            initial_user_msg
         )
         
         if response:
             self.audio_output.speak(response, lang="en")
+            history.append({"role": "user", "parts": [initial_user_msg]})
             history.append({"role": "model", "parts": [response]})
         else:
             self.audio_output.play_error()
@@ -83,15 +85,15 @@ Your goals:
                     text = self.groq_client.transcribe(audio_file)
                     if text:
                         logger.info(f"User said: {text}")
-                        history.append({"role": "user", "parts": [text]})
-                        
                         self.audio_output.play_beep() # indicate processing
+                        
                         response = self.gemini_client.generate_conversation_response(
                             self.system_prompt, history, text
                         )
                         
                         if response:
                             self.audio_output.speak(response, lang="en")
+                            history.append({"role": "user", "parts": [text]})
                             history.append({"role": "model", "parts": [response]})
                             turns += 1
                         else:

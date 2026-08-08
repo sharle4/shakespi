@@ -12,6 +12,10 @@ class AudioInput:
         self.device_index = None
         self.simulate_input = False
         self.mock_audio_path = mock_audio_path
+
+        if config_path == "config/config.example.yaml" and os.path.exists("config/config.yaml"):
+            config_path = "config/config.yaml"
+
         self._load_config(config_path)
 
         self.samplerate = 16000 # Whisper prefers 16kHz

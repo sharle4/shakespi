@@ -11,6 +11,9 @@ class InputHandler:
         self._stop_event = threading.Event()
         self.simulate_input = False
         
+        if config_path == "config/config.example.yaml" and os.path.exists("config/config.yaml"):
+            config_path = "config/config.yaml"
+
         self._load_config(config_path)
         self._load_mapping(mapping_path)
         

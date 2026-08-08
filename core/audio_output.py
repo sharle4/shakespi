@@ -17,6 +17,9 @@ class AudioOutput:
         self.device_index = None
         self.piper_bin = "piper" # Assumes piper is in PATH or alias
 
+        if config_path == "config/config.example.yaml" and os.path.exists("config/config.yaml"):
+            config_path = "config/config.yaml"
+
         self._load_config(config_path)
 
     def _load_config(self, config_path):
