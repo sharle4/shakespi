@@ -17,19 +17,16 @@ class Database:
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         
         with self.get_connection() as conn:
-            if not db_exists or self._is_empty(conn):
-                logger.info(f"Initializing database at {self.db_path}")
-                try:
-                    with open(self.schema_path, 'r', encoding='utf-8') as f:
-                        schema_script = f.read()
-                    conn.executescript(schema_script)
-                    conn.commit()
-                    logger.info("Database initialized successfully.")
-                except Exception as e:
-                    logger.error(f"Failed to initialize database: {e}")
-                    raise
-            else:
-                logger.debug("Database already initialized.")
+            logger.info(f"Initializing database at {self.db_path}")
+            try:
+                with open(self.schema_path, 'r', encoding='utf-8') as f:
+                    schema_script = f.read()
+                conn.executescript(schema_script)
+                conn.commit()
+                logger.info("Database initialized/updated successfully.")
+            except Exception as e:
+                logger.error(f"Failed to initialize database: {e}")
+                raise
 
     def _is_empty(self, conn):
         cursor = conn.cursor()
@@ -57,6 +54,21 @@ class Database:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM profiles WHERE id = ?", (profile_id,))
             return cursor.fetchone()
+
+    def log_conversation_message(self, session_id, profile_id, character_name, speaker, content):
+        """
+        Saves a conversation message turn locally in SQLite.
+        """
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO conversation_messages (session_id, profile_id, character_name, speaker, content)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (session_id, profile_id, character_name, speaker, content))
+                conn.commit()
+        except Exception as e:
+            logger.error(f"Failed to log conversation message: {e}")
 
 # Global instance
 db = None

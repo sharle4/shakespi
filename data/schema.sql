@@ -62,3 +62,15 @@ CREATE TABLE IF NOT EXISTS story_progress (
     FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     UNIQUE(profile_id, story_id)
 );
+
+CREATE TABLE IF NOT EXISTS conversation_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id INTEGER NOT NULL,
+    profile_id INTEGER NOT NULL,
+    character_name TEXT,
+    speaker TEXT NOT NULL, -- 'user' or 'model'
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(session_id) REFERENCES sessions(id) ON DELETE CASCADE,
+    FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE
+);

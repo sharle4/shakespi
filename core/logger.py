@@ -2,7 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-def setup_logger(name="shakespi", log_file="shakespi.log", level=logging.DEBUG):
+def setup_logger(name="shakespi", log_file="data/shakespi.log", level=logging.DEBUG):
     """
     Sets up a logger with a rotating file handler and a console handler.
     """
@@ -14,6 +14,11 @@ def setup_logger(name="shakespi", log_file="shakespi.log", level=logging.DEBUG):
         return logger
 
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # Ensure data directory exists
+    log_dir = os.path.dirname(log_file)
+    if log_dir:
+        os.makedirs(log_dir, exist_ok=True)
 
     # File handler with rotation (max 5MB per file, keep 3 backups)
     file_handler = RotatingFileHandler(

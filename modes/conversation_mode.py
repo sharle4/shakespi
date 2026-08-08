@@ -1,4 +1,6 @@
 import time
+import os
+import json
 from core.database import get_db
 from core.logger import logger
 
@@ -78,6 +80,24 @@ Your goals:
 
         return None
 
+    def _save_local_transcript(self, session_id, character_name, history):
+        """
+        Saves a copy of the conversation history to a local JSON file.
+        """
+        try:
+            os.makedirs("data/conversations", exist_ok=True)
+            filepath = f"data/conversations/session_{session_id}.json"
+            data = {
+                "session_id": session_id,
+                "profile_id": self.profile_id,
+                "character_name": character_name or "Compagnon",
+                "history": history
+            }
+            with open(filepath, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            logger.error(f"Failed to save local conversation transcript file: {e}")
+
     def run(self):
         logger.info(f"Starting Conversation mode for profile {self.profile_id}")
         
@@ -93,7 +113,9 @@ Your goals:
         else:
             self.audio_output.speak("Mode conversation. Maintenez le clic gauche pour parler. Clic droit pour quitter.", lang="fr")
         
+        session_id = self._start_session(character_name)
         history = []
+
         if character_name:
             initial_user_msg = f"Start the conversation by greeting me in character as {character_name} and asking how I am."
         else:
@@ -109,11 +131,14 @@ Your goals:
             self.audio_output.speak(response, lang="en")
             history.append({"role": "user", "parts": [initial_user_msg]})
             history.append({"role": "model", "parts": [response]})
+            
+            # Save locally
+            self.db.log_conversation_message(session_id, self.profile_id, character_name, "model", response)
+            self._save_local_transcript(session_id, character_name, history)
         else:
             self.audio_output.play_error()
             return
             
-        session_id = self._start_session()
         turns = 0
 
         while True:
@@ -155,6 +180,11 @@ Your goals:
                             self.audio_output.speak(response, lang="en")
                             history.append({"role": "user", "parts": [text]})
                             history.append({"role": "model", "parts": [response]})
+                            
+                            # Log messages locally in SQLite & JSON file
+                            self.db.log_conversation_message(session_id, self.profile_id, character_name, "user", text)
+                            self.db.log_conversation_message(session_id, self.profile_id, character_name, "model", response)
+                            self._save_local_transcript(session_id, character_name, history)
                             turns += 1
                         else:
                             self.audio_output.play_error()
@@ -163,24 +193,26 @@ Your goals:
                 else:
                     self.audio_output.play_error()
 
-        self._end_session(session_id, turns)
+        self._end_session(session_id, character_name, turns)
 
-    def _start_session(self):
+    def _start_session(self, character_name=None):
+        summary_txt = f"Conversation avec {character_name}" if character_name else "Conversation par défaut"
         with self.db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                INSERT INTO sessions (profile_id, mode) 
-                VALUES (?, 'conversation')
-            """, (self.profile_id,))
+                INSERT INTO sessions (profile_id, mode, summary) 
+                VALUES (?, 'conversation', ?)
+            """, (self.profile_id, summary_txt))
             conn.commit()
             return cursor.lastrowid
 
-    def _end_session(self, session_id, turns):
+    def _end_session(self, session_id, character_name, turns):
+        summary_txt = f"Conversation avec {character_name or 'Compagnon'} ({turns} tours)."
         with self.db.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
                 UPDATE sessions 
                 SET ended_at = CURRENT_TIMESTAMP, score = ?, summary = ?
                 WHERE id = ?
-            """, (turns, f"Conversation de {turns} tours.", session_id))
+            """, (turns, summary_txt, session_id))
             conn.commit()
