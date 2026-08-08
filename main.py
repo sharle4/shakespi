@@ -13,11 +13,17 @@ from modes.vocabulary_mode import VocabularyMode
 from modes.conversation_mode import ConversationMode
 from modes.story_mode import StoryMode
 
-def play_menu(audio_output):
-    audio_output.speak("Menu principal.", lang="fr")
-    audio_output.speak("Pour le vocabulaire, clic gauche.", lang="fr")
-    audio_output.speak("Pour la conversation, clic droit.", lang="fr")
-    audio_output.speak("Pour les histoires, bouton latéral avant.", lang="fr")
+def play_menu(audio_output, input_handler=None):
+    checker = input_handler.has_event if input_handler else None
+    sentences = [
+        "Menu principal.",
+        "Pour le vocabulaire, clic gauche.",
+        "Pour la conversation, clic droit.",
+        "Pour les histoires, bouton latéral avant."
+    ]
+    for s in sentences:
+        if audio_output.speak(s, lang="fr", interrupt_checker=checker):
+            break
 
 def select_profile(audio_output, input_handler, db):
     profiles = db.get_profiles()
@@ -25,11 +31,11 @@ def select_profile(audio_output, input_handler, db):
         audio_output.speak("Aucun profil trouvé. Veuillez en créer un.", lang="fr")
         return None
         
-    audio_output.speak("Sélection du profil.", lang="fr")
+    audio_output.speak("Sélection du profil.", lang="fr", interrupt_checker=input_handler.has_event)
     selected_idx = 0
     
     while True:
-        audio_output.speak(profiles[selected_idx]['name'], lang="fr")
+        audio_output.speak(profiles[selected_idx]['name'], lang="fr", interrupt_checker=input_handler.has_event)
         
         event = input_handler.get_event(block=True)
         if not event:
@@ -40,7 +46,7 @@ def select_profile(audio_output, input_handler, db):
             continue
             
         if button == "LEFT": # Select
-            audio_output.speak(f"Bonjour {profiles[selected_idx]['name']}", lang="fr")
+            audio_output.speak(f"Bonjour {profiles[selected_idx]['name']}", lang="fr", interrupt_checker=input_handler.has_event)
             return profiles[selected_idx]['id']
         elif button == "RIGHT": # Next
             selected_idx = (selected_idx + 1) % len(profiles)
@@ -58,14 +64,14 @@ def main():
         
         input_handler.start()
         
-        audio_output.speak("Démarrage de Shakespi.", lang="fr")
+        audio_output.speak("Démarrage de Shakespi.", lang="fr", interrupt_checker=input_handler.has_event)
         
         profile_id = select_profile(audio_output, input_handler, db)
         if not profile_id:
             logger.error("No profile selected, exiting.")
             return
 
-        play_menu(audio_output)
+        play_menu(audio_output, input_handler)
 
         while True:
             event = input_handler.get_event(block=True)
@@ -79,19 +85,19 @@ def main():
             if button == "LEFT":
                 vocab_mode = VocabularyMode(audio_output, input_handler, profile_id)
                 vocab_mode.run()
-                play_menu(audio_output)
+                play_menu(audio_output, input_handler)
             elif button == "RIGHT":
                 conv_mode = ConversationMode(audio_output, audio_input, input_handler, gemini_client, groq_client, profile_id)
                 conv_mode.run()
-                play_menu(audio_output)
+                play_menu(audio_output, input_handler)
             elif button == "SIDE_FWD":
                 story_mode = StoryMode(audio_output, input_handler, gemini_client, profile_id)
                 story_mode.run()
-                play_menu(audio_output)
+                play_menu(audio_output, input_handler)
             elif button == "MIDDLE":
-                play_menu(audio_output)
+                play_menu(audio_output, input_handler)
             elif button == "SIDE_BACK":
-                audio_output.speak("Statistiques non implémentées.", lang="fr")
+                audio_output.speak("Statistiques non implémentées.", lang="fr", interrupt_checker=input_handler.has_event)
                 
     except KeyboardInterrupt:
         logger.info("Shakespi stopped by user.")

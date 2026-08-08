@@ -97,13 +97,15 @@ class AudioOutput:
             logger.error(f"TTS generation error: {e}")
             return None
 
-    def play_file(self, filepath):
+    def play_file(self, filepath, interrupt_checker=None):
         """
-        Plays a WAV file using sounddevice. Blocks until finished.
+        Plays a WAV file using sounddevice.
+        If interrupt_checker is provided and returns True, playback stops immediately and returns True (interrupted).
+        Returns False if played to completion without interruption.
         """
         if not filepath or not os.path.exists(filepath):
             logger.error(f"File to play not found: {filepath}")
-            return
+            return False
 
         try:
             data, fs = sf.read(filepath)
@@ -113,21 +115,42 @@ class AudioOutput:
                 data = data.astype('float32')
 
             logger.debug(f"Playing audio: {filepath}")
+            duration = len(data) / float(fs)
+            
             if self.device_index is not None:
                 sd.play(data, fs, device=self.device_index)
             else:
                 sd.play(data, fs)
-            sd.wait() # Wait until file is done playing
+
+            import time
+            start_t = time.time()
+            interrupted = False
+
+            while (time.time() - start_t) < duration:
+                if interrupt_checker and interrupt_checker():
+                    sd.stop()
+                    logger.info("Audio playback interrupted by user input.")
+                    interrupted = True
+                    break
+                time.sleep(0.02)
+
+            if not interrupted:
+                sd.stop()
+
+            return interrupted
         except Exception as e:
             logger.error(f"Failed to play audio file {filepath}: {e}")
+            return False
 
-    def speak(self, text, lang="en"):
+    def speak(self, text, lang="en", interrupt_checker=None):
         """
         Generates (or retrieves) TTS and plays it.
+        Returns True if interrupted, False if finished.
         """
         filepath = self.generate_tts(text, lang)
         if filepath:
-            self.play_file(filepath)
+            return self.play_file(filepath, interrupt_checker=interrupt_checker)
+        return False
 
     def play_error(self):
         """Play a generic error message"""

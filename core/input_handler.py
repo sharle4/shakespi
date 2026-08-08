@@ -19,6 +19,10 @@ class InputHandler:
         
         self.input_thread = None
 
+    def has_event(self):
+        """Returns True if there is a pending event in the event queue."""
+        return not self.event_queue.empty()
+
     def _load_config(self, config_path):
         try:
             with open(config_path, 'r', encoding='utf-8') as f:
