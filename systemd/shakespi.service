@@ -4,12 +4,12 @@ After=network.target sound.target
 
 [Service]
 Type=simple
-User=pi
-Group=pi
-WorkingDirectory=/home/pi/shakespi
-Environment="PATH=/home/pi/shakespi/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+User=shakespi
+Group=shakespi
+WorkingDirectory=/home/shakespi/shakespi
+Environment="PATH=/home/shakespi/shakespi/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 Environment="PYTHONUNBUFFERED=1"
-ExecStart=/home/pi/shakespi/venv/bin/python main.py
+ExecStart=/home/shakespi/shakespi/venv/bin/python main.py
 Restart=on-failure
 RestartSec=5
 

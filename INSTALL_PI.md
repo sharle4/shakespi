@@ -10,15 +10,15 @@ Ce guide vous explique étape par étape comment installer Shakespi sur un Raspb
 
 ## Étape 1 : Transférer les fichiers
 
-Copiez tout le dossier `shakespi` sur votre Raspberry Pi, dans le répertoire `/home/pi/shakespi`.
-(Vous pouvez utiliser `scp` depuis votre PC : `scp -r shakespi pi@adresse_ip:/home/pi/`)
+Copiez tout le dossier `shakespi` sur votre Raspberry Pi, dans le répertoire `/home/shakespi/shakespi`.
+(Vous pouvez utiliser `scp` depuis votre PC : `scp -r shakespi shakespi@adresse_ip:/home/shakespi/`)
 
 ## Étape 2 : Exécuter le script d'installation automatique
 
 Connectez-vous au Raspberry Pi via SSH (ou avec un clavier temporaire branché dessus), puis lancez :
 
 ```bash
-cd /home/pi/shakespi
+cd /home/shakespi/shakespi
 chmod +x scripts/setup_pi.sh
 ./scripts/setup_pi.sh
 ```

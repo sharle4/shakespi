@@ -5,12 +5,12 @@ echo "Starting Shakespi installation on Raspberry Pi..."
 
 # 1. Update and install system dependencies
 echo "Installing system dependencies..."
-sudo apt-update
+sudo apt update
 sudo apt-get install -y python3-pip python3-venv git alsa-utils libportaudio2 libasound2-dev
 
 # 2. Create Python virtual environment
 echo "Setting up Python virtual environment..."
-cd /home/pi/shakespi
+cd /home/shakespi/shakespi
 python3 -m venv venv
 source venv/bin/activate
 
@@ -27,7 +27,7 @@ wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_arm64.tar.g
 tar -xf piper_arm64.tar.gz
 rm piper_arm64.tar.gz
 # Add piper to path in the service file or link it to venv
-ln -sf $(pwd)/piper/piper /home/pi/shakespi/venv/bin/piper
+ln -sf $(pwd)/piper/piper /home/shakespi/shakespi/venv/bin/piper
 cd ..
 
 # 5. Download Piper voices
@@ -49,9 +49,9 @@ if [ ! -f config/config.yaml ]; then
 fi
 
 # 7. Add user to input and audio groups
-echo "Adding pi user to input and audio groups..."
-sudo usermod -a -G input pi
-sudo usermod -a -G audio pi
+echo "Adding shakespi user to input and audio groups..."
+sudo usermod -a -G input shakespi
+sudo usermod -a -G audio shakespi
 
 echo "Installation script completed successfully!"
 echo "Please follow INSTALL_PI.md for remaining steps."
