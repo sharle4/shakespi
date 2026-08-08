@@ -9,7 +9,7 @@ class GeminiClient:
     def __init__(self, config_path="config/config.example.yaml"):
         self.api_key = None
         self.is_configured = False
-        self.model_name = "gemini-flash-latest"
+        self.model_name = "gemini-3.5-flash"
         load_dotenv()
         
         if config_path == "config/config.example.yaml" and os.path.exists("config/config.yaml"):
@@ -42,20 +42,14 @@ class GeminiClient:
             pref_candidates.append(f"models/{user_pref}")
 
         recommended_models = [
-            "gemini-flash-latest",
-            "models/gemini-flash-latest",
-            "gemini-3.6-flash",
-            "models/gemini-3.6-flash",
             "gemini-3.5-flash",
             "models/gemini-3.5-flash",
-            "gemini-flash-lite-latest",
-            "models/gemini-flash-lite-latest",
+            "gemini-3.1-flash-lite",
+            "models/gemini-3.1-flash-lite",
             "gemini-3.5-flash-lite",
             "models/gemini-3.5-flash-lite",
-            "gemini-pro-latest",
-            "models/gemini-pro-latest",
-            "gemma-4-31b-it",
-            "models/gemma-4-31b-it"
+            "gemini-flash-latest",
+            "models/gemini-flash-latest"
         ]
 
         dynamic_models = []
